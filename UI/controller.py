@@ -22,7 +22,7 @@ class Controller:
             self._view.update_page()
             return
 
-        self._model.buildGrafo(self._view._ddGenre.value)
+        self._model.buildGraph(self._view._ddGenre.value)
 
         self._view.txt_result.controls.clear()
         self._view.txt_result.controls.append(ft.Text("Grafo correttamente creato."))
@@ -30,8 +30,7 @@ class Controller:
         self._view.txt_result.controls.append(ft.Text(f"Numero di archi: {self._model.get_numarchi()}"))
         self._view.update_page()
 
-    def handleCreaGrafo(self,e):
-        pass
+
 
     def handleCammino(self,e):
         pass

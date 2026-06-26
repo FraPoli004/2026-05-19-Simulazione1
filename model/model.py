@@ -6,8 +6,11 @@ from database.DAO import DAO
 class Model:
     def __init__(self):
         self._grafo = nx.DiGraph()
-        self._nodi = []
+        self._nodi = None
         self._idMap = {}
+        self._popolarità = {}
+        for a in DAO.getAllPop():
+            self._popolarità[a[0]] = a[1]
 
     def getGenres(self):
         return DAO.getAllGenres()
@@ -24,6 +27,27 @@ class Model:
         for a in artisti:
             self._grafo.add_node(a)
             self._idMap[a.ArtistId]= a
-        #self._grafo.addEdgesPesati()
+        self.addEdgesPesati(g)
+
+    def addEdgesPesati(self,g):
+        edges = DAO.getAllEdges(g)
+        for e in edges:
+            n1 = self._idMap.get(e[0])
+            n2 = self._idMap.get(e[1])
+            pop1 = self._popolarità.get(e[0])
+            pop2 = self._popolarità.get(e[1])
+            if n1 is None or n2 is None:
+                continue
+            if pop1 > pop2:
+                self._grafo.add_edge(n1.ArtistId,n2.ArtistId, weight=pop1+pop2)
+
+            if pop1 < pop2:
+                self._grafo.add_edge(n2.ArtistId, n1.ArtistId, weight=pop1 + pop2)
+
+            else:
+                self._grafo.add_edge(n1.ArtistId, n2.ArtistId, weight=pop1 + pop2)
+                self._grafo.add_edge(n1.ArtistId, n2.ArtistId, weight=pop1 + pop2)
+
+
 
 
