@@ -31,6 +31,5 @@ class Controller:
         self._view.update_page()
 
 
-
     def handleCammino(self,e):
         pass

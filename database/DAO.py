@@ -61,19 +61,20 @@ class DAO():
         cursor.close()
         conn.close()
         return result
-
     @staticmethod
-    def getAllPop():
+    def getAllPop(g):
         conn = DBConnect.get_connection()
 
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """select distinct a.ArtistId as art, count(i.TrackId ) as pop
-                    from album a, track t, invoiceline i 
-                    where a.AlbumId = t.AlbumId and t.TrackId = i.TrackId 
-                    group by art"""
-        cursor.execute(query)
+        # Popolarità dell'artista calcolata sui brani acquistati del genere selezionato
+        query = """select a.ArtistId as art, count(i.TrackId) as pop
+                    from album a, track t, invoiceline i
+                    where a.AlbumId = t.AlbumId and t.TrackId = i.TrackId
+                    and t.GenreId = %s
+                    group by a.ArtistId"""
+        cursor.execute(query, (g,))
 
         for row in cursor:
             result.append((row['art'], row['pop']))
