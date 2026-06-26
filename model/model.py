@@ -34,19 +34,20 @@ class Model:
         for e in edges:
             n1 = self._idMap.get(e[0])
             n2 = self._idMap.get(e[1])
-            pop1 = self._popolarità.get(n1.ArtistId)
-            pop2 = self._popolarità.get(n1.ArtistId)
             if n1 is None or n2 is None:
                 continue
+            pop1 = self._popolarità.get(n1.ArtistId)
+            pop2 = self._popolarità.get(n2.ArtistId)
+
             if pop1 > pop2:
                 self._grafo.add_edge(n1,n2, weight=pop1+pop2)
 
             if pop1 < pop2:
                 self._grafo.add_edge(n2, n1, weight=pop1 + pop2)
 
-            else:
+            if pop1 == pop2:
                 self._grafo.add_edge(n1, n2, weight=pop1 + pop2)
-                self._grafo.add_edge(n1, n2, weight=pop1 + pop2)
+                self._grafo.add_edge(n2, n1, weight=pop1 + pop2)
 
 
 
